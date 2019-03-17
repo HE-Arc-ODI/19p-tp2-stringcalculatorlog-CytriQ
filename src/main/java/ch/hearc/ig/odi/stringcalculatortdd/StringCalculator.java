@@ -5,8 +5,12 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 public class StringCalculator {
+
+    private static final Logger logger = LogManager.getLogger(StringCalculator.class);
 
     public StringCalculator() {
     }
@@ -19,6 +23,7 @@ public class StringCalculator {
         //if it begins by '//' then it's a personalize delimiter(s)
         if (numbers.startsWith("//")) {
             delimiter = this.extractDelimiter(numbers);
+            logger.info("Delimiter is '"+delimiter+"'");
             //"cut" the beginning of the string so that the personalize delimiter is removed
             numbersUpdated = numbers.substring(numbers.indexOf("\n") + 1);
         }
@@ -36,10 +41,14 @@ public class StringCalculator {
             //test if the numbers array is not empty
             if (!(number.trim().length() == 0)) {
                 Integer numberInt = Integer.parseInt(number);
-                if (numberInt < 0)
+                if (numberInt < 0) {
+                    logger.fatal("Negative number detected");
                     negativeNumbers.add(numberInt);
-                else if (numberInt <= 1000)
+                }
+                else if (numberInt <= 1000) {
+                    logger.warn("Number greater than 1000 detected");
                     returnValue += numberInt;
+                }
             }
         }
 
